@@ -3,7 +3,7 @@ public class Mensaje {
     private Usuario autor;
     private int alcance;
     private Usuario usuarioActual;
-
+    
     public Mensaje(Usuario autor, int alcanceInicial, Usuario usuarioInicial) {
         this.autor = autor;
         this.alcance = alcanceInicial;
