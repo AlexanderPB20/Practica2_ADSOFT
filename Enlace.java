@@ -1,4 +1,3 @@
-
 public class Enlace {
     private Usuario usuarioOrigen;
     private Usuario usuarioDestino;
@@ -6,19 +5,18 @@ public class Enlace {
 
     private static int sumaCostesEnlace = 0;
 
-    public Enlace(Usuario usuarioOrigen, Usuario usuarioDestino, int coste) {
+    public Enlace(Usuario usuarioOrigen, Usuario usuarioDestino, int coste){
         this.usuarioOrigen = usuarioOrigen;
         this.usuarioDestino = usuarioDestino;
-
         if(coste <= 0){
             this.coste = 1;
         }else{
             this.coste = coste;
         }
-        
+        sumaCostesEnlace += this.coste;
     }
 
-    public Enlace(Usuario usuarioOrigen, Usuario usuarioDestino) {
+    public Enlace(Usuario usuarioOrigen, Usuario usuarioDestino){
         this(usuarioOrigen, usuarioDestino, 1);
     }
 
@@ -28,39 +26,35 @@ public class Enlace {
 
     public Usuario getUsuarioDestino(){
         return usuarioDestino;
-    } 
+    }
 
     public int getCoste(){
         return coste;
     }
-    /* Hacemos que el metodo devuelva un booleano si los datos no valen, nuevoUsuario = NULL, nuevoCoste <= 0 */
 
     public void cambiarDestino(Usuario nuevoUsuario, int nuevoCoste){
-        if(coste <= 0 ){
-            this.coste = 1;
-            this.usuarioDestino = nuevoUsuario;
-        }
         this.usuarioDestino = nuevoUsuario;
-        this.coste = nuevoCoste;   
+        if(nuevoCoste <= 0){
+            this.coste = 1;
+        }else{
+            this.coste = nuevoCoste;
+        }
+    }
+
+    public int costeEspecial(){
+        return 0;
+    }
+
+    public int costeReal(){
+        return coste + costeEspecial();
+    }
+
+    public static int getCosteTotalEnlaces(){
+        return sumaCostesEnlace;
     }
 
     @Override
     public String toString(){
-        return "@" + this.usuarioOrigen + "--" + this.coste + "-->" + "@" + this.usuarioDestino;
+        return "(@" + usuarioOrigen.getNombre() + "--" + coste + "-->" + "@" + usuarioDestino.getNombre() + ")";
     }
-
-    public int getCosteTotalEnlaces(){
-        return sumaCostesEnlace;
-    }
-
-    /* a prevision de apartado 6  */
-    public int costeEspecial(){
-        return 0;
-    }
-    
-    public int costeReal(){
-        return this.coste + costeEspecial();
-    }
-
-    
 }

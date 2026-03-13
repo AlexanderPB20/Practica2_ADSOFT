@@ -1,60 +1,54 @@
 public class Mensaje {
-    
-    private Usuario autor;
+
+    private final String texto;
     private int alcance;
     private Usuario usuarioActual;
-    
-    public Mensaje(Usuario autor, int alcanceInicial, Usuario usuarioInicial) {
-        this.autor = autor;
+
+    public Mensaje(String texto, int alcanceInicial, Usuario usuarioInicial){
+        this.texto = texto;
         this.alcance = alcanceInicial;
-        this.usuarioActual = usuarioInicial; // Antes tenías usuario_actual (con guion)
+        this.usuarioActual = usuarioInicial;
     }
 
-    public Usuario getAutor() { return autor; }
-    public int getAlcance() { return alcance; }
-    public Usuario getUsuarioActual() { return usuarioActual; }
+    public int getAlcance(){
+        return alcance;
+    }
+
+    public Usuario getUsuarioActual(){ 
+        return usuarioActual; 
+    }
 
     @Override
-    public String toString() {
-        return "Mensaje (m:" + this.alcance + ") en @" + this.usuarioActual.getNombre();
+    public String toString(){
+        return "Mensaje(" + texto + ":" + alcance + ") en @" + usuarioActual.getNombre();
     }
 
-    public boolean aceptadoPor(Usuario u) {
+    public boolean aceptadoPor(Usuario u){
         return true; 
     }
 
-    public boolean puedeDifundirPor(Enlace e) {
-        // OJO: En tu Enlace.java el método se llama getCoste()
-        // Lo cambiamos a getCoste() para que no te dé error ahora
-        return this.alcance >= e.getCoste(); 
+    public boolean puedeDifundirPor(Enlace e){
+        return alcance >= e.costeReal();
     }
 
-    public boolean difunde(Enlace e) {
-        // Ajustado a los nombres de métodos de tus archivos subidos:
-        // getUsuarioOrigen() y getUsuarioDestino()
-        if (e.getUsuarioOrigen().equals(this.usuarioActual) && 
-            puedeDifundirPor(e) && 
-            aceptadoPor(e.getUsuarioDestino())) {
-            
-            this.usuarioActual = e.getUsuarioDestino();
-            this.alcance -= e.getCoste();
-            this.alcance += this.usuarioActual.getCapacidadAmplificacion();
-            
+    public boolean difunde(Enlace e){
+        if(e.getUsuarioOrigen() == usuarioActual && puedeDifundirPor(e) && aceptadoPor(e.getUsuarioDestino())){
+            usuarioActual = e.getUsuarioDestino();
+            alcance -= e.costeReal();
+            alcance += usuarioActual.getCapacidadAmplificacion();
             return true;
         }
         return false;
     }
 
-    public boolean difunde(Usuario... usuarios) {
+    public boolean difunde(Usuario... usuarios){
         boolean exitoTotal = true;
 
-        for (Usuario siguiente : usuarios) {
-            // Usamos el método getEnlace que ya creaste en Usuario.java
-            Enlace e = this.usuarioActual.getEnlace(siguiente); 
+        for(Usuario siguiente : usuarios){
+            Enlace e = this.usuarioActual.getEnlace(siguiente);
 
-            if (e != null && this.difunde(e)) {
-                // Éxito en este salto
-            } else {
+            if(e != null && this.difunde(e)){
+            }else{
                 exitoTotal = false;
             }
         }

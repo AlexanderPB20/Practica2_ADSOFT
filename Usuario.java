@@ -19,16 +19,15 @@ public class Usuario {
     }
 
     public boolean addEnlace(Enlace enlace){
-
         if(enlace.getUsuarioOrigen() != this){
             return false;
-
         }
-
         if(enlace.getUsuarioDestino() == this){
-            return false;    
+            return false;
         }
-        
+        if(getEnlace(enlace.getUsuarioDestino()) != null){
+            return false;
+        }
         enlacesSalientes.add(enlace);
         return true;
     }
@@ -73,7 +72,15 @@ public class Usuario {
 
     @Override
     public String toString(){
-        return "@" + nombre + "(" + capacidadAmplificacion + ")" + (enlacesSalientes.isEmpty() ? "" : " [ "  + String.join(" , ", enlacesSalientes.stream().map(e -> "(@" + e.getUsuarioOrigen().getNombre() + "-" + e.getCoste() + "->@" + e.getUsuarioDestino().getNombre() + ")") .toList()) + " ]");
+        String parteEnlaces;
+        if(enlacesSalientes.isEmpty()){
+            parteEnlaces = "";
+        }else{
+            parteEnlaces = " [ " + String.join(", ", enlacesSalientes.stream().map(e -> "(@" 
+                    + e.getUsuarioOrigen().getNombre() + "--" + e.getCoste() + "-->" + "@" + e.getUsuarioDestino().getNombre() 
+                    + ")").toList()) + " ]";
+        }
+        return "@" + nombre + "(" + capacidadAmplificacion + ")" + parteEnlaces;
     }
 
 }
